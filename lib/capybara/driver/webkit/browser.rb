@@ -129,6 +129,11 @@ class Capybara::Driver::Webkit
       command("SetProxy")
     end
 
+    def restart_server
+      stop_server!
+      start_server
+    end
+
     private
 
     def start_server
@@ -145,6 +150,10 @@ class Capybara::Driver::Webkit
       pipe, @pid = server_pipe_and_pid(server_path)
       register_shutdown_hook
       pipe
+    end
+
+    def stop_server!
+      Process.kill("INT", @pid)
     end
 
     def register_shutdown_hook
